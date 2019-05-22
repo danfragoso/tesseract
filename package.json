@@ -1,0 +1,22 @@
+{
+  "name": "tesseract",
+  "version": "1.0.0",
+  "description": "Node.js tesseract wrapper",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://girhub.com/danfragoso/tesseract"
+  },
+  "keywords": [
+    "tesseract",
+    "buffer",
+    "nodejs",
+    "ocr",
+    "tesseract-legacy"
+  ],
+  "author": "danfragoso",
+  "license": "MIT"
+}
