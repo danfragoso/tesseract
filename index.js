@@ -19,7 +19,28 @@ const runTesseract = (optionsArray, input, inputType) => {
 
 const parseOptions = (options, input, inputType) => {
 	const inputParam = inputType === 'path' ? input : 'stdin';
-	return ['--oem', '0', inputParam, 'stdout'];
+	let parametersArray = [];
+	let validOptions = ['oem', 'psm'];
+	
+	for (const key in options) {
+		if (validOptions.includes(key)) {
+			if (key !== 'parameters') {
+				parametersArray.push(`--${key}`);
+				parametersArray.push(options[key]);
+			}
+		} else {
+			if (key === 'lang') {
+				parametersArray.push('-l');
+				parametersArray.push(options[key]);
+			} else if (key === 'parameters') {
+
+			}
+		}
+	}
+
+	parametersArray.unshift('stdout');
+	parametersArray.unshift(inputParam);
+	return parametersArray;
 };
 
 const getInputType = input => {
@@ -34,6 +55,12 @@ const getInputType = input => {
 	return inputType;
 }
 
+const removeNewLine = string => {
+	const pattern = new RegExp(/(\r\n|\n|\r)/gm);
+  const cleanString = string.replace(pattern, '');
+  return cleanString.trim();
+}
+
 const recog = async (input, options = {}) => {
 	return new Promise( (r, e) => {
 		let inputType = getInputType(input);
@@ -45,7 +72,7 @@ const recog = async (input, options = {}) => {
 			if (result.err) {
 				e(Error(result.msg));
 			} else {
-				r(result.msg);
+				r(removeNewLine(result.msg));
 			}
 		} else {
 			e(Error('Wrong input format, use either a Buffer or a String with an image path.'));
@@ -53,4 +80,4 @@ const recog = async (input, options = {}) => {
 	});
 };
 
-module.exports = { recog }
+module.exports = { recog };
